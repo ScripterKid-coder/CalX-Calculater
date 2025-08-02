@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>📘 About Us - 🧮 Calx</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+.calx-footer {
+  background: #000828;
+  color: cyan;
+  font-family: 'Orbitron', sans-serif;
+  padding: 40px 20px 20px;
+  border-top: 2px solid #0ff;
+  box-shadow: 0 -2px 10px cyan;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 30px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.footer-section {
+  flex: 1 1 200px;
+}
+
+.footer-section h3,
+.footer-section h4 {
+  margin-bottom: 12px;
+  color: #0ff;
+  text-shadow: 0 0 8px #0ff;
+}
+
+.footer-section p {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li {
+  margin: 6px 0;
+}
+
+.footer-section ul li a {
+  color: cyan;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: 0.3s;
+}
+
+.footer-section ul li a:hover {
+  color: white;
+  text-shadow: 0 0 8px cyan;
+}
+
+.footer-bottom {
+  margin-top: 30px;
+  text-align: center;
+  border-top: 1px solid #0ff;
+  padding-top: 15px;
+  font-size: 0.9rem;
+  color: #0ff;
+  text-shadow: 0 0 5px #0ff;
+}
+
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #fff;
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 20px;
+      animation: fadeIn 1s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    nav {
+      background: rgba(0, 255, 255, 0.1);
+      padding: 12px;
+      text-align: center;
+      border: 2px solid cyan;
+      border-radius: 10px;
+      box-shadow: 0 0 10px cyan;
+      margin-bottom: 30px;
+    }
+
+    nav a {
+      color: cyan;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      transition: 0.3s;
+    }
+    .feedback-btn {
+  display: inline-block;
+  padding: 12px 25px;
+  background: linear-gradient(45deg, #00ffff, #ff00ff);
+  color: #000;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 1.1rem;
+  box-shadow: 0 0 15px #0ff, 0 0 30px #f0f;
+  transition: 0.3s ease-in-out;
+}
+
+.feedback-btn:hover {
+  background: linear-gradient(45deg, #ff00ff, #00ffff);
+  color: white;
+  text-shadow: 0 0 5px white;
+  transform: scale(1.1);
+  box-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff;
+}
+
+
+    nav a:hover {
+      color: #fff;
+      text-shadow: 0 0 10px #0ff;
+    }
+
+    main.container {
+      background: rgba(0, 0, 0, 0.7);
+      border: 2px solid #0ff;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 0 25px #0ff;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    h1, h2, h3, h4 {
+      color: #0ff;
+      margin-bottom: 15px;
+      text-shadow: 0 0 10px #0ff;
+    }
+
+    p, li {
+      margin-bottom: 10px;
+      font-size: 1.05rem;
+    }
+
+    ol {
+      margin-left: 20px;
+      padding-left: 10px;
+    }
+
+    li {
+      list-style-type: "⚡ ";
+    }
+
+    p.email {
+      background: #111;
+      border: 1px solid #0ff;
+      padding: 10px;
+      display: inline-block;
+      border-radius: 8px;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #0ff;
+    }
+
+    @media (max-width: 600px) {
+      nav a {
+        display: block;
+        margin: 10px 0;
+      }
+
+      main.container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html">🧮 Calx</a>
+      <a href="about.html">📘 About</a>
+      <a href="contact.html">📬 Contact</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>📘 About This App</h1>
+    <p>Welcome to <strong>Real Calculator</strong>, a next-level web-based calculator that fuses the feel of a physical calculator with the power of modern web technology. 🧠 Designed not just for simple calculations but for advanced math tasks, unit conversions, graphing, and even step-by-step problem solving — all in one sleek, responsive interface.</p>
+
+    <h2>🎯 Why This App Exists</h2>
+    <p>This project was built by a young, passionate web developer to showcase how powerful HTML, CSS, and JavaScript can be — especially when combined with AI-assisted logic, smooth animations, and real-world usability.</p>
+    <p>From stylish neon buttons to full keyboard support and fun game modes, it proves that even complex tools can be:</p>
+
+    <ol>
+      <li>🕹️ Fun</li>
+      <li>⚡ Fast</li>
+      <li>📱 Mobile-friendly</li>
+      <li>🎨 Beautifully designed</li>
+      <li>🔧 Fully customizable</li>
+    </ol>
+
+    <h3>🔍 What Makes It Special?</h3>
+    <ol>
+      <li>Inspired by real calculator layout — with modern twist</li>
+      <li>Supports both button clicks & keyboard input</li>
+      <li>Features game mode, XP system, and leaderboard</li>
+      <li>Includes math formula library and step-by-step solving</li>
+      <li>Exports history to PDF</li>
+      <li>Converts units and plots graphs</li>
+      <li>Has variable support (x, y, z) and memory functions</li>
+      <li>Includes typing sounds and theme toggle</li>
+      <li>PWA-ready for offline use</li>
+    </ol>   
+
+    <h4>📬 Contact</h4>
+    <p>Want to give feedback or work with the developer?</p>
+    <p class="email">📧 rafym7632@gmail.com</p>
+    <div style="text-align:center; margin-top: 30px;">
+  <a href="contact.html" class="feedback-btn">📬 Give Feedback</a>
+</div>
+
+  </main>
+</body>
+
+</html>
+<footer class="calx-footer">
+  <div class="footer-container">
+    <div class="footer-section about">
+      <h3>About Calx</h3>
+      <p>
+        Calx is your intelligent, interactive calculator for graphing, conversion,
+        and smart math tools. Built to empower students, coders, and engineers, Calx
+        offers intuitive UI and smart features for faster thinking.
+      </p>
+      <p><strong>💡 Powered by ScripterKid | 2025</strong></p>
+    </div>
+
+    <div class="footer-section">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="">🏠 Home</a></li>
+        <li><a href="index.html">🧮 Calculator</a></li>
+        <li><a href="graph.html">📊 Graph Tool</a></li>
+        <li><a href="converter.html">📏 Unit Converter</a></li>
+        <li><a href="about.html">📘 About</a></li>
+        <li><a href="contact.html">📬 Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h4>Projects</h4>
+      <ul>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Calx Web</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Calx for Android</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Calx Lite</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Formulator</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h4>Popular Tools</h4>
+      <ul>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Quadratic Solver</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Scientific Calc</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Graph Plotter</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">History Viewer</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Memory Storage</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 Calx by ScripterKid. All Rights Reserved.</p>
+  </div>
+</footer>

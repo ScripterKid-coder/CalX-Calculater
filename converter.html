@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📏 Universal Converter - Calx</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+.calx-footer {
+  background: #000828;
+  color: cyan;
+  font-family: 'Orbitron', sans-serif;
+  padding: 40px 20px 20px;
+  border-top: 2px solid #0ff;
+  box-shadow: 0 -2px 10px cyan;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 30px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.footer-section {
+  flex: 1 1 200px;
+}
+
+.footer-section h3,
+.footer-section h4 {
+  margin-bottom: 12px;
+  color: #0ff;
+  text-shadow: 0 0 8px #0ff;
+}
+
+.footer-section p {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li {
+  margin: 6px 0;
+}
+
+.footer-section ul li a {
+  color: cyan;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: 0.3s;
+}
+
+.footer-section ul li a:hover {
+  color: white;
+  text-shadow: 0 0 8px cyan;
+}
+
+.footer-bottom {
+  margin-top: 30px;
+  text-align: center;
+  border-top: 1px solid #0ff;
+  padding-top: 15px;
+  font-size: 0.9rem;
+  color: #0ff;
+  text-shadow: 0 0 5px #0ff;
+}
+
+    nav {
+      text-align: center;
+      background: #111;
+      padding: 15px;
+      border-bottom: 2px solid cyan;
+    }
+
+    nav a {
+      margin: 0 15px;
+      color: cyan;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      color: #fff;
+      text-shadow: 0 0 8px #0ff;
+    }
+
+    main {
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h2 {
+      text-align: center;
+      color: cyan;
+      text-shadow: 0 0 10px #0ff;
+    }
+
+    .filter-btns {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .filter-btns button {
+      margin: 5px;
+      padding: 8px 14px;
+      border: none;
+      background: cyan;
+      color: black;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .filter-btns button:hover {
+      background: #0ff;
+      box-shadow: 0 0 10px #0ff;
+    }
+
+    #searchInput {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      border: none;
+      font-size: 1rem;
+    }
+
+    #convertBox label {
+      display: block;
+      margin: 10px 0;
+      font-weight: bold;
+    }
+
+    #convertBox input {
+      padding: 10px;
+      border-radius: 8px;
+      width: 100%;
+      font-size: 1rem;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">🧮 Calx</a>
+    <a href="converter.html">📏 Convert</a>
+    <a href="graph.html">📊 Graph</a>
+    <a href="game.html">🎮 Game</a>
+    <a href="about.html">📘 About</a>
+    <a href="contact.html">📬 Contact</a>
+  </nav>
+
+  <main>
+    <h2>📏 Universal Converter</h2>
+
+    <div class="filter-btns">
+      <button onclick="filterCategory('all')">🌍 All</button>
+      <button onclick="filterCategory('measurement')">📐 Measurements</button>
+      <button onclick="filterCategory('currency')">💰 Currency</button>
+    </div>
+
+    <input type="text" id="searchInput" placeholder="🔍 Search conversions..." oninput="renderConverter()">
+
+    <select id="convertType" onchange="renderConverter()"></select>
+
+    <div id="convertBox" style="margin-top: 20px;"></div>
+  </main>
+
+  <script>
+    const conversions = {
+     "km-m": { label1: "Kilometers", label2: "Meters", func1: v => v * 1000, func2: v => v / 1000, category: 'measurement' },
+  "m-cm": { label1: "Meters", label2: "Centimeters", func1: v => v * 100, func2: v => v / 100, category: 'measurement' },
+  "cm-mm": { label1: "Centimeters", label2: "Millimeters", func1: v => v * 10, func2: v => v / 10, category: 'measurement' },
+  "mm-um": { label1: "Millimeters", label2: "Micrometers", func1: v => v * 1000, func2: v => v / 1000, category: 'measurement' },
+  "um-nm": { label1: "Micrometers", label2: "Nanometers", func1: v => v * 1000, func2: v => v / 1000, category: 'measurement' },
+  "mi-km": { label1: "Miles", label2: "Kilometers", func1: v => v * 1.60934, func2: v => v / 1.60934, category: 'measurement' },
+  "yd-m": { label1: "Yards", label2: "Meters", func1: v => v * 0.9144, func2: v => v / 0.9144, category: 'measurement' },
+  "ft-in": { label1: "Feet", label2: "Inches", func1: v => v * 12, func2: v => v / 12, category: 'measurement' },
+  "in-cm": { label1: "Inches", label2: "Centimeters", func1: v => v * 2.54, func2: v => v / 2.54, category: 'measurement' },
+  "kg-g": { label1: "Kilograms", label2: "Grams", func1: v => v * 1000, func2: v => v / 1000, category: 'measurement' },
+  "g-mg": { label1: "Grams", label2: "Milligrams", func1: v => v * 1000, func2: v => v / 1000, category: 'measurement' },
+  "mg-ug": { label1: "Milligrams", label2: "Micrograms", func1: v => v * 1000, func2: v => v / 1000, category: 'measurement' },
+  "lb-kg": { label1: "Pounds", label2: "Kilograms", func1: v => v * 0.453592, func2: v => v / 0.453592, category: 'measurement' },
+  "oz-g": { label1: "Ounces", label2: "Grams", func1: v => v * 28.3495, func2: v => v / 28.3495, category: 'measurement' },
+  "l-ml": { label1: "Liters", label2: "Milliliters", func1: v => v * 1000, func2: v => v / 1000, category: 'measurement' },
+  "ml-cl": { label1: "Milliliters", label2: "Centiliters", func1: v => v / 10, func2: v => v * 10, category: 'measurement' },
+  "gal-l": { label1: "Gallons", label2: "Liters", func1: v => v * 3.78541, func2: v => v / 3.78541, category: 'measurement' },
+  "pt-l": { label1: "Pints", label2: "Liters", func1: v => v * 0.473176, func2: v => v / 0.473176, category: 'measurement' },
+  "qt-l": { label1: "Quarts", label2: "Liters", func1: v => v * 0.946353, func2: v => v / 0.946353, category: 'measurement' },
+  "c-f": { label1: "Celsius", label2: "Fahrenheit", func1: v => (v * 9/5) + 32, func2: v => (v - 32) * 5/9, category: 'measurement' },
+  "c-k": { label1: "Celsius", label2: "Kelvin", func1: v => v + 273.15, func2: v => v - 273.15, category: 'measurement' },
+  "usd-inr": { label1: "USD", label2: "INR", func1: v => v * 83, func2: v => v / 83, category: 'currency' },
+  "usd-eur": { label1: "USD", label2: "EUR", func1: v => v * 0.91, func2: v => v / 0.91, category: 'currency' },
+  "usd-gbp": { label1: "USD", label2: "GBP", func1: v => v * 0.77, func2: v => v / 0.77, category: 'currency' },
+  "usd-cad": { label1: "USD", label2: "CAD", func1: v => v * 1.35, func2: v => v / 1.35, category: 'currency' },
+  "usd-aud": { label1: "USD", label2: "AUD", func1: v => v * 1.5, func2: v => v / 1.5, category: 'currency' },
+  "usd-jpy": { label1: "USD", label2: "JPY", func1: v => v * 145, func2: v => v / 145, category: 'currency' },
+  "usd-cny": { label1: "USD", label2: "CNY", func1: v => v * 7.1, func2: v => v / 7.1, category: 'currency' },
+  "usd-sar": { label1: "USD", label2: "SAR", func1: v => v * 3.75, func2: v => v / 3.75, category: 'currency' },
+  "usd-aed": { label1: "USD", label2: "AED", func1: v => v * 3.67, func2: v => v / 3.67, category: 'currency' },
+  // ... Add 40 more similar currency conversions here
+      // Expand here to 150+ measurements and 50+ currencies as needed
+    };
+
+    let currentCategory = 'all';
+
+    function renderConverter() {
+      const typeSelect = document.getElementById("convertType");
+      const searchText = document.getElementById("searchInput").value.toLowerCase();
+      typeSelect.innerHTML = '';
+
+      for (let key in conversions) {
+        const item = conversions[key];
+        if ((currentCategory === 'all' || item.category === currentCategory) &&
+            (item.label1.toLowerCase().includes(searchText) || item.label2.toLowerCase().includes(searchText))) {
+          const option = document.createElement('option');
+          option.value = key;
+          option.textContent = `${item.label1} ↔ ${item.label2}`;
+          typeSelect.appendChild(option);
+        }
+      }
+
+      if (typeSelect.options.length > 0) {
+        typeSelect.selectedIndex = 0;
+        updateConvertBox(typeSelect.value);
+      } else {
+        document.getElementById("convertBox").innerHTML = "<p>No matches found.</p>";
+      }
+    }
+
+    function updateConvertBox(type) {
+      const unit = conversions[type];
+      const box = document.getElementById("convertBox");
+      box.innerHTML = `
+        <label>${unit.label1}: <input id="val1" type="number" oninput="convert('${type}', 1)"></label>
+        <label>${unit.label2}: <input id="val2" type="number" oninput="convert('${type}', 2)"></label>
+      `;
+    }
+
+    function convert(type, from) {
+      const unit = conversions[type];
+      let v1 = document.getElementById("val1");
+      let v2 = document.getElementById("val2");
+      if (from === 1) v2.value = unit.func1(parseFloat(v1.value || 0)).toFixed(4);
+      else v1.value = unit.func2(parseFloat(v2.value || 0)).toFixed(4);
+    }
+
+    function filterCategory(cat) {
+      currentCategory = cat;
+      renderConverter();
+    }
+
+    renderConverter();
+  </script>
+</body>
+</html>
+<footer class="calx-footer">
+  <div class="footer-container">
+    <div class="footer-section about">
+      <h3>About Calx</h3>
+      <p>
+        Calx is your intelligent, interactive calculator for graphing, conversion,
+        and smart math tools. Built to empower students, coders, and engineers, Calx
+        offers intuitive UI and smart features for faster thinking.
+      </p>
+      <p><strong>💡 Powered by ScripterKid | 2025</strong></p>
+    </div>
+
+    <div class="footer-section">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="">🏠 Home</a></li>
+        <li><a href="index.html">🧮 Calculator</a></li>
+        <li><a href="graph.html">📊 Graph Tool</a></li>
+        <li><a href="converter.html">📏 Unit Converter</a></li>
+        <li><a href="about.html">📘 About</a></li>
+        <li><a href="contact.html">📬 Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h4>Projects</h4>
+      <ul>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Calx Web</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Calx for Android</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Calx Lite</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Formulator</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h4>Popular Tools</h4>
+      <ul>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Quadratic Solver</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Scientific Calc</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Graph Plotter</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">History Viewer</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Memory Storage</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 Calx by ScripterKid. All Rights Reserved.</p>
+  </div>
+</footer>

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🧮 Calx - Main</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: start;
+      min-height: 100vh;
+      padding: 20px;
+      animation: fadeIn 1s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .calx-footer {
+  background: #000828;
+  color: cyan;
+  font-family: 'Orbitron', sans-serif;
+  padding: 40px 20px 20px;
+  border-top: 2px solid #0ff;
+  box-shadow: 0 -2px 10px cyan;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 30px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.footer-section {
+  flex: 1 1 200px;
+}
+
+.footer-section h3,
+.footer-section h4 {
+  margin-bottom: 12px;
+  color: #0ff;
+  text-shadow: 0 0 8px #0ff;
+}
+
+.footer-section p {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li {
+  margin: 6px 0;
+}
+
+.footer-section ul li a {
+  color: cyan;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: 0.3s;
+}
+
+.footer-section ul li a:hover {
+  color: white;
+  text-shadow: 0 0 8px cyan;
+}
+
+.footer-bottom {
+  margin-top: 30px;
+  text-align: center;
+  border-top: 1px solid #0ff;
+  padding-top: 15px;
+  font-size: 0.9rem;
+  color: #0ff;
+  text-shadow: 0 0 5px #0ff;
+}
+
+
+    nav {
+      width: 100%;
+      background: linear-gradient(to right, #1c1c1c, #333);
+      text-align: center;
+      padding: 12px 0;
+      border-bottom: 3px solid cyan;
+      box-shadow: 0 0 10px cyan;
+    }
+
+    nav a {
+      margin: 0 15px;
+      color: cyan;
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: #fff;
+      text-shadow: 0 0 10px #0ff;
+    }
+
+    .calculator-container {
+      margin-top: 40px;
+      background: #000000b0;
+      border: 3px solid #0ff;
+      border-radius: 20px;
+      padding: 20px;
+      width: 330px;
+      box-shadow: 0 0 25px #0ff;
+    }
+
+    .display {
+      background: #222;
+      color: #0f0;
+      font-size: 1.6rem;
+      padding: 10px;
+      height: 50px;
+      border: 2px inset #333;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .buttons button {
+      padding: 15px;
+      font-size: 1.2rem;
+      background: linear-gradient(to right, #06f, #0ff);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      color: #000;
+      font-weight: bold;
+      transition: transform 0.1s, background 0.4s;
+    }
+
+    .buttons button:hover {
+      transform: scale(1.1);
+      background: linear-gradient(to right, #f0f, #f06);
+      color: #fff;
+    }
+
+    .history {
+      margin-top: 20px;
+      background: #111;
+      border: 1px solid #0ff;
+      padding: 10px;
+      max-height: 100px;
+      overflow-y: auto;
+      border-radius: 10px;
+    }
+
+    button.theme-toggle,
+    button.export-btn,
+    button.formula-btn,
+    button.steps-btn,
+    button.sound-toggle {
+      margin-top: 10px;
+      width: 100%;
+      padding: 10px;
+      background: #0ff;
+      border: none;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #f0f;
+      color: #fff;
+      box-shadow: 0 0 10px #f0f;
+    }
+
+    #formulaModal, #stepModal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #111;
+      border: 2px solid cyan;
+      border-radius: 10px;
+      padding: 20px;
+      z-index: 999;
+      max-width: 400px;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">🧮 Calx</a>
+    <a href="converter.html">📏 Convert</a>
+    <a href="graph.html">📊 Graph</a>
+    <a href="game.html">🎮 Game</a>
+    <a href="about.html">📘 About</a>
+    <a href="contact.html">📬 Contact</a>
+  </nav>
+
+  <div class="calculator-container">
+    <div class="display" id="display"></div>
+    <div class="buttons">
+      <button onclick="append('7')">7</button>
+      <button onclick="append('8')">8</button>
+      <button onclick="append('9')">9</button>
+      <button onclick="append('/')">÷</button>
+      <button onclick="append('4')">4</button>
+      <button onclick="append('5')">5</button>
+      <button onclick="append('6')">6</button>
+      <button onclick="append('*')">×</button>
+      <button onclick="append('1')">1</button>
+      <button onclick="append('2')">2</button>
+      <button onclick="append('3')">3</button>
+      <button onclick="append('-')">−</button>
+      <button onclick="append('0')">0</button>
+      <button onclick="append('.')">.</button>
+      <button onclick="calculate()">=</button>
+      <button onclick="append('+')">+</button>
+      <button onclick="clearDisplay()">C</button>
+      <button onclick="backspace()">⌫</button>
+      <button onclick="copyResult()">📋</button>
+      <button onclick="toggleNegate()">±</button>
+    </div>
+    <div class="history" id="history"></div>
+    <button class="theme-toggle" onclick="toggleTheme()">🎨 Toggle Theme</button>
+    <button class="export-btn" onclick="exportPDF()">📄 Export to PDF</button>
+    <button class="formula-btn" onclick="toggleFormula()">📚 Math Formulas</button>
+    <button class="steps-btn" onclick="toggleSteps()">🧙 Step-by-Step Solver</button>
+    <button class="sound-toggle" onclick="toggleSound()">🎵 Toggle Sound</button>
+  </div>
+
+  <div id="formulaModal">
+    <h3>📚 Math Formula Library</h3>
+    <ul>
+      <li>Area of Circle: πr²</li>
+      <li>Quadratic Formula: x = [-b ± √(b²-4ac)] / 2a</li>
+      <li>Pythagorean Theorem: a² + b² = c²</li>
+      <li>Log Rules: log(ab) = log(a) + log(b)</li>
+      <li>Volume of Cube: V = a³</li>
+    </ul>
+    <button onclick="toggleFormula()">❌ Close</button>
+  </div>
+
+  <div id="stepModal">
+    <h3>🧙 Step-by-Step Solver</h3>
+    <p><strong>Example:</strong> 2(x + 3) = 10</p>
+    <ol>
+      <li>Distribute: 2x + 6 = 10</li>
+      <li>Subtract 6: 2x = 4</li>
+      <li>Divide: x = 2</li>
+    </ol>
+    <button onclick="toggleSteps()">❌ Close</button>
+  </div>
+
+  <audio id="clickSound" src="https://cdn.pixabay.com/audio/2023/03/24/audio_f7c35fa00e.mp3"></audio>
+
+  <script>
+    const display = document.getElementById('display');
+    const historyBox = document.getElementById('history');
+    let soundEnabled = true;
+
+    function append(value) {
+      if (soundEnabled) {
+        const sound = document.getElementById('clickSound').cloneNode();
+        sound.play();
+      }
+      display.innerText += value;
+    }
+
+    function calculate() {
+      try {
+        const result = eval(display.innerText);
+        historyBox.innerHTML += `<div>${display.innerText} = <strong>${result}</strong></div>`;
+        display.innerText = result;
+      } catch {
+        display.innerText = 'Error';
+      }
+    }
+
+    function clearDisplay() {
+      display.innerText = '';
+    }
+
+    function backspace() {
+      display.innerText = display.innerText.slice(0, -1);
+    }
+
+    function copyResult() {
+      navigator.clipboard.writeText(display.innerText);
+    }
+
+    function toggleNegate() {
+      if (display.innerText.startsWith('-')) {
+        display.innerText = display.innerText.slice(1);
+      } else {
+        display.innerText = '-' + display.innerText;
+      }
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+    }
+
+    function exportPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const content = document.getElementById('history').innerText;
+      doc.text('Calculator History:', 10, 10);
+      doc.text(content || 'No history yet.', 10, 20);
+      doc.save('calculator-history.pdf');
+    }
+
+    function toggleFormula() {
+      const modal = document.getElementById('formulaModal');
+      modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function toggleSteps() {
+      const modal = document.getElementById('stepModal');
+      modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      alert('Sound: ' + (soundEnabled ? 'ON' : 'OFF'));
+    }
+  </script>
+</body>
+</html>
+ 
+<footer class="calx-footer">
+  <div class="footer-container">
+    <div class="footer-section about">
+      <h3>About Calx</h3>
+      <p>
+        Calx is your intelligent, interactive calculator for graphing, conversion,
+        and smart math tools. Built to empower students, coders, and engineers, Calx
+        offers intuitive UI and smart features for faster thinking.
+      </p>
+      <p><strong>💡 Powered by ScripterKid | 2025</strong></p>
+    </div>
+
+    <div class="footer-section">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="">🏠 Home</a></li>
+        <li><a href="index.html">🧮 Calculator</a></li>
+        <li><a href="graph.html">📊 Graph Tool</a></li>
+        <li><a href="converter.html">📏 Unit Converter</a></li>
+        <li><a href="about.html">📘 About</a></li>
+        <li><a href="contact.html">📬 Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h4>Projects</h4>
+      <ul>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Calx Web</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Calx for Android</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Calx Lite</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Formulator</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h4>Popular Tools</h4>
+      <ul>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Quadratic Solver</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Scientific Calc</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Graph Plotter</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">History Viewer</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Memory Storage</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 Calx by ScripterKid. All Rights Reserved.</p>
+  </div>
+</footer>

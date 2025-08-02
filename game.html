@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎮 Math Challenge Game - 🧮 Calx</title>
+  <style>
+    body {
+      background: #111;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+    }
+    .calx-footer {
+  background: #000828;
+  color: cyan;
+  font-family: 'Orbitron', sans-serif;
+  padding: 40px 20px 20px;
+  border-top: 2px solid #0ff;
+  box-shadow: 0 -2px 10px cyan;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 30px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.footer-section {
+  flex: 1 1 200px;
+}
+
+.footer-section h3,
+.footer-section h4 {
+  margin-bottom: 12px;
+  color: #0ff;
+  text-shadow: 0 0 8px #0ff;
+}
+
+.footer-section p {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li {
+  margin: 6px 0;
+}
+
+.footer-section ul li a {
+  color: cyan;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: 0.3s;
+}
+
+.footer-section ul li a:hover {
+  color: white;
+  text-shadow: 0 0 8px cyan;
+}
+
+.footer-bottom {
+  margin-top: 30px;
+  text-align: center;
+  border-top: 1px solid #0ff;
+  padding-top: 15px;
+  font-size: 0.9rem;
+  color: #0ff;
+  text-shadow: 0 0 5px #0ff;
+}
+
+    nav {
+      background-color: #000;
+      padding: 10px;
+      text-align: center;
+    }
+    nav a, nav button {
+      margin: 0 8px;
+      color: #fff;
+      text-decoration: none;
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .container {
+      padding: 20px;
+      text-align: center;
+    }
+    #leaderboard {
+      list-style: none;
+      padding: 0;
+    }
+    #leaderboard li {
+      margin: 8px 0;
+      background: #1e1e1e;
+      padding: 10px;
+      border-radius: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #00f2fe, #4facfe);
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html">🧮 Calx</a>
+      <a href="converter.html">📏 Convert</a>
+      <a href="graph.html">📊 Graph</a>
+      <a href="game.html">🎮 Game</a>
+      <a href="about.html">📘 About</a>
+      <a href="contact.html">📬 Contact</a>
+      <button id="toggleTheme">🎨 Theme</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div id="startScreen">
+      <h2>🎯 Get Ready for the Ultimate Math Challenge!</h2>
+      <label>Choose Difficulty:
+        <select id="difficulty">
+          <option value="kids">Kids</option>
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+          <option value="impossible">Impossible</option>
+        </select>
+      </label><br/><br/>
+      <button onclick="startGame()">🚀 Start Game</button>
+    </div>
+
+    <div id="gameScreen" style="display:none">
+      <h3 id="question">--</h3>
+      <input type="number" id="answerInput" placeholder="Your answer..." autofocus />
+      <button onclick="submitAnswer()">✅ Submit</button>
+      <p>⏱️ Time Left: <span id="timer">60</span> sec</p>
+      <p>🏆 Score: <span id="score">0</span> | ⭐ XP: <span id="xp">0</span></p>
+      <p>🔢 Question: <span id="qIndex">1</span>/50</p>
+    </div>
+
+    <h4>🏅 Leaderboard</h4>
+    <button onclick="exportLeaderboard()">📂 Export Leaderboard</button>
+    <ul id="leaderboard"></ul>
+  </main>
+
+  <script>
+    let currentAnswer = 0, score = 0, xp = 0, timeLeft = 60, questionIndex = 0;
+    let totalQuestions = 50, timerInterval;
+    let currentDifficulty = "easy";
+
+    document.getElementById("answerInput").addEventListener("keydown", e => {
+      if (e.key === "Enter") submitAnswer();
+    });
+
+    function getLevel(xp) {
+      if (xp >= 500) return "🔱 Level 5";
+      if (xp >= 300) return "🔥 Level 4";
+      if (xp >= 150) return "⚡ Level 3";
+      if (xp >= 50) return "💡 Level 2";
+      return "🌱 Level 1";
+    }
+
+    function generateQuestion() {
+      let a, b, op;
+      switch(currentDifficulty) {
+        case 'kids': a = rand(10); b = rand(10); op = randOp(['+','-']); break;
+        case 'easy': a = rand(20); b = rand(20); op = randOp(['+','-','*']); break;
+        case 'medium': a = rand(50); b = rand(25); op = randOp(['+','-','*','%']); break;
+        case 'hard': a = rand(100); b = rand(50)+1; op = randOp(['+','-','*','%','/']); break;
+        case 'impossible': a = rand(1000); b = rand(100)+1; op = randOp(['+','-','*','/','%']); break;
+      }
+      currentAnswer = eval(`${a}${op}${b}`);
+      document.getElementById("question").innerText = `${a} ${op} ${b} = ?`;
+    }
+
+    function rand(n) { return Math.floor(Math.random() * n); }
+    function randOp(ops) { return ops[rand(ops.length)]; }
+
+    function startGame() {
+      document.getElementById("startScreen").style.display = "none";
+      document.getElementById("gameScreen").style.display = "block";
+
+      currentDifficulty = document.getElementById("difficulty").value;
+      score = xp = 0; timeLeft = 60; questionIndex = 1;
+
+      updateDisplay();
+      generateQuestion();
+
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateDisplay();
+        if (timeLeft <= 0 || questionIndex > totalQuestions) {
+          clearInterval(timerInterval);
+          alert(`⏱️ Time's up! Final Score: ${score}`);
+          saveHighScore(score, xp);
+        }
+      }, 1000);
+    }
+
+    function updateDisplay() {
+      document.getElementById("score").innerText = score;
+      document.getElementById("xp").innerText = xp;
+      document.getElementById("qIndex").innerText = questionIndex;
+      document.getElementById("timer").innerText = timeLeft;
+    }
+
+    function submitAnswer() {
+      const input = Number(document.getElementById("answerInput").value);
+      if (input === currentAnswer) { score++; xp += 10; }
+      else { xp = Math.max(0, xp - 5); }
+
+      questionIndex++;
+      updateDisplay();
+      document.getElementById("answerInput").value = "";
+
+      if (questionIndex <= totalQuestions) generateQuestion();
+      else {
+        clearInterval(timerInterval);
+        alert(`🎉 You finished all questions! Final Score: ${score}`);
+        saveHighScore(score, xp);
+      }
+    }
+
+    function saveHighScore(score, xp) {
+      const name = prompt("Enter your name:");
+      if (!name) return;
+      const scores = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+      scores.push({ name, score, xp, difficulty: currentDifficulty });
+      scores.sort((a, b) => b.score - a.score);
+      localStorage.setItem("leaderboard", JSON.stringify(scores));
+      renderLeaderboard();
+    }
+
+    function exportLeaderboard() {
+      const scores = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+      if (scores.length === 0) return alert("Leaderboard is empty.");
+      let content = "🏅 Leaderboard\n\n";
+      scores.slice(0, 5).forEach((entry, i) => {
+        content += `#${i+1} ${entry.name} — ${entry.score} pts, ${entry.xp} XP (${entry.difficulty})\n`;
+      });
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "leaderboard.txt";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function renderLeaderboard() {
+      const scores = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+      const list = document.getElementById("leaderboard");
+      list.innerHTML = "";
+      const medals = ["🥇 1st", "🥈 2nd", "🥉 3rd", "4️⃣", "5️⃣"];
+      scores.slice(0, 5).forEach((entry, i) => {
+        const li = document.createElement("li");
+        const level = getLevel(entry.xp);
+        li.innerHTML = `<strong>${medals[i]}</strong>: ${entry.name} — 
+          <span style="color:#00f2fe">${entry.score} pts</span> | 
+          <span style="color:#ff6ec4">${entry.xp} XP</span> | 
+          ${level} 
+          <small style="color:gray">(${entry.difficulty})</small>`;
+        list.appendChild(li);
+      });
+    }
+
+    renderLeaderboard();
+  </script>
+</body>
+</html>
+<footer class="calx-footer">
+  <div class="footer-container">
+    <div class="footer-section about">
+      <h3>About Calx</h3>
+      <p>
+        Calx is your intelligent, interactive calculator for graphing, conversion,
+        and smart math tools. Built to empower students, coders, and engineers, Calx
+        offers intuitive UI and smart features for faster thinking.
+      </p>
+      <p><strong>💡 Powered by ScripterKid | 2025</strong></p>
+    </div>
+
+    <div class="footer-section">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="">🏠 Home</a></li>
+        <li><a href="index.html">🧮 Calculator</a></li>
+        <li><a href="graph.html">📊 Graph Tool</a></li>
+        <li><a href="converter.html">📏 Unit Converter</a></li>
+        <li><a href="about.html">📘 About</a></li>
+        <li><a href="contact.html">📬 Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h4>Projects</h4>
+      <ul>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Calx Web</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Calx for Android</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Calx Lite</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Formulator</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h4>Popular Tools</h4>
+      <ul>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Quadratic Solver</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Scientific Calc</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Graph Plotter</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">History Viewer</a></li>
+        <li><a href="https://scripterkid-coder.github.io/CalX/graph.html">Memory Storage</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 Calx by ScripterKid. All Rights Reserved.</p>
+  </div>
+</footer>
